@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --bg: #0b1020;
+  --card: #0f1724;
+  --muted: #94a3b8;
+  --primary: #00C2FF;
+  --accent: #7C3AED;
+}
+
+html,body,#root{height:100%}
+body {
+  @apply bg-[color:var(--bg)] text-slate-100 font-body leading-relaxed;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* HERO exact styles */
+.hero-title{
+  font-weight:800;
+  letter-spacing:-0.02em;
+  line-height:1.01;
+  text-wrap:balance;
+}
+
+/* subtle glass card style used in many areas */
+.glass-card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%);
+  border: 1px solid rgba(255,255,255,0.04);
+  backdrop-filter: blur(8px);
+}
+
+/* better clickable focus */
+button:focus{ outline:2px solid rgba(124,58,237,0.18); outline-offset:2px; }
+
+/* more compact project badges */
+.tech-chip{ font-size:11px; padding:4px 8px; border-radius:9999px; }
+
+/* scroll-behavior */
+html { scroll-behavior: smooth; }
+
+/* tiny tweaks to timeline */
+.timeline-line { width:2px; background: linear-gradient(180deg,var(--primary), rgba(124,58,237,0.8)); }
+
+/* responsive tweaks */
+@media (min-width: 1024px){
+  .hero-title{font-size:48px;}
+}
