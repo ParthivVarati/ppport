@@ -13,6 +13,12 @@ export const skills = [
   { name: "LangChain", lat: 55, lon: -140, color: "#6C5CE7", category: "tech" },
   { name: "LangGraph", lat: 20, lon: -150, color: "#6C5CE7", category: "tech" },
   { name: "Flask", lat: 60, lon: 130, color: "#6C5CE7", category: "tech" },
+  { name: "OpenAI (GPT)", lat: 70, lon: 120, color: "#6C5CE7", category: "tech" },
+  { name: "LLaMA", lat: 40, lon: 100, color: "#6C5CE7", category: "tech" },
+
+  // ===== AI Frameworks / Platforms =====
+  { name: "Hugging Face", lat: 20, lon: 160, color: "#6C5CE7", category: "tech" },
+  { name: "Transformers", lat: -35, lon: 170, color: "#6C5CE7", category: "tech" },
   
   
   { name: "Git", lat: -33.9, lon: 151.2, color: "#6C5CE7", category: "tech" },
@@ -28,3 +34,4 @@ export const skills = [
   { name: "UI/UX Design", lat: 10, lon: 66.3, color: "#ffffff", category: "creative" },
   { name: "Photography", lat: 50, lon: 66.3, color: "#ffffff", category: "creative" }
 ];
+
