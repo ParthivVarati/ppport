@@ -19,6 +19,9 @@ export const skills = [
   // ===== AI Frameworks / Platforms =====
   { name: "Hugging Face", lat: 20, lon: 160, color: "#6C5CE7", category: "tech" },
   { name: "Transformers", lat: -35, lon: 170, color: "#6C5CE7", category: "tech" },
+  // ===== Deep Learning Framework =====
+  { name: "PyTorch", lat: 50, lon: -155, color: "#6C5CE7", category: "tech" },
+
   
   
   { name: "Git", lat: -33.9, lon: 151.2, color: "#6C5CE7", category: "tech" },
@@ -34,4 +37,5 @@ export const skills = [
   { name: "UI/UX Design", lat: 10, lon: 66.3, color: "#ffffff", category: "creative" },
   { name: "Photography", lat: 50, lon: 66.3, color: "#ffffff", category: "creative" }
 ];
+
 
