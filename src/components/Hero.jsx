@@ -136,7 +136,7 @@ export default function Hero() {
 
           {/* Resume Button */}
           <a
-            href="https://drive.google.com/file/d/1roAYCDiu742vJlaSmmJt-koO5vh374Uo/view?usp=sharing"
+            href="https://drive.google.com/file/d/1-K6FjHw7A5NLbdF1XXcCBdtCKZ0Heb0W/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-card px-4 py-2 text-sm font-medium text-slate-100 hover:border-primary hover:text-primary transition"
@@ -149,4 +149,5 @@ export default function Hero() {
     </section>
   );
 }
+
 
