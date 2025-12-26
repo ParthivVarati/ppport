@@ -10,13 +10,22 @@ const tabs = [
 
 const content = {
   tech: {
-    Languages: ["Python", "TypeScript", "SQL"],
-    Frontend: ["HTML5", "CSS3", "React", "Tailwind CSS"],
-    Backend: ["Node.js", "Express", "REST APIs"],
-    Database: ["MongoDB", "MySQL"],
-    AIML : ["Machine Learning", "RAG", "LangChain", "LangGraph"],
-    Tools : ["Docker", "Git"]
-  },
+  Languages: ["Python", "SQL"],
+
+  Frontend: ["HTML5", "CSS3", "React", "Tailwind CSS"],
+
+  Backend: ["Flask", "REST APIs"],
+
+  Database: ["MongoDB", "MySQL"],
+
+  AIML: ["Machine Learning", "RAG"],
+
+  LLMs: ["OpenAI (GPT)", "LLaMA"],
+
+  AIFrameworks: ["Hugging Face", "Transformers", "LangChain", "LangGraph"],
+
+  Tools: ["Docker", "Git"]
+},
   soft: {
     Strengths: ["Communication", "Leadership", "Problem Solving","Teamwork", "Adaptability"]
   },
@@ -101,3 +110,4 @@ export default function Skills() {
     </section>
   );
 }
+
