@@ -106,9 +106,9 @@ export default function Hero() {
         </div>
 
         <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4">
-          <span className="block">I build performant backends</span>
+          <span className="block">I build secure, reliable</span>
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] block">
-            and beautiful frontends.
+            AI and ML systems.
           </span>
         </h1>
 
@@ -149,3 +149,4 @@ export default function Hero() {
     </section>
   );
 }
+
