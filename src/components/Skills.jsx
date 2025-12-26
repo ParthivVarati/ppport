@@ -17,10 +17,12 @@ const content = {
   Backend: ["Flask", "REST APIs"],
 
   Database: ["MongoDB", "MySQL"],
-
+    
   AIML: ["Machine Learning", "RAG"],
 
   LLMs: ["OpenAI (GPT)", "LLaMA"],
+    
+  DLFramework: ["PyTorch"],
 
   AIFrameworks: ["Hugging Face", "Transformers", "LangChain", "LangGraph"],
 
@@ -110,4 +112,5 @@ export default function Skills() {
     </section>
   );
 }
+
 
