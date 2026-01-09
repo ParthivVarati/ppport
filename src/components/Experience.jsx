@@ -6,7 +6,7 @@ const experiences = [
   {
     id: 0,
     company: "Nimoy AI",
-    role: "Software Engineer Intern",
+    role: " AI Intern",
     location: "Remote",
     duration: "Sep 2025 – Present",
     status: "Current",
@@ -192,3 +192,4 @@ export default function Experience() {
     </section>
   );
 }
+
