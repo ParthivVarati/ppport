@@ -6,14 +6,14 @@ const experiences = [
   {
     id: 0,
     company: "Nimoy AI",
-    role: " AI Intern",
+    role: " AI Engineer ",
     location: "Remote",
     duration: "Sep 2025 – Present",
     status: "Current",
     accent: "blue",
     points: [
       {
-        text: "Enhanced AI document agent Letta memory, improving multi-turn context handling by ",
+        text: "Created agents using RAG, LangChain and Integrated Letta memory, improving multi-turn context handling by ",
         highlight: "30%",
       },
       {
@@ -192,4 +192,5 @@ export default function Experience() {
     </section>
   );
 }
+
 
