@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, LayoutGroup, motion, useScroll, useSpring } from "framer-motion";
 import Lenis from "lenis";
 import {
   ArrowDown,
@@ -9,636 +9,642 @@ import {
   Linkedin,
   Mail,
   Menu,
-  Moon,
-  Sun,
-  X
+  Shuffle,
+  X,
 } from "lucide-react";
 
-const EMAIL = "parthivvarati@gmail.com";
-const RESUME = "https://drive.google.com/file/d/1N8_VzH1kNRCk4k6jAwDQTbfrVsSsgIVp/view?usp=sharing";
+const links = {
+  github: "https://github.com/ParthivVarati",
+  linkedin: "https://www.linkedin.com/in/naga-parthiv/",
+  email: "mailto:parthivvarati@gmail.com",
+  resume:
+    "https://drive.google.com/file/d/1N8_VzH1kNRCk4k6jAwDQTbfrVsSsgIVp/view?usp=sharing",
+};
+
+const aboutCopy = {
+  story: (
+    <div className="about-copy">
+      <p>I started with the screen. Then I wanted to know what lived behind it.</p>
+      <p>
+        Code led to models. Models led to vision. Vision led to backends—and backends
+        led to the systems that make all of it dependable.
+      </p>
+      <p>
+        Today, as an SDE-1 at vriksha.ai, I still follow the same instinct: open the
+        next door and understand the whole thing.
+      </p>
+    </div>
+  ),
+  tldr: (
+    <ul className="quick-facts">
+      <li><span>Now</span>SDE-1 at vriksha.ai</li>
+      <li><span>Before</span>AI Engineer at nimoy.ai</li>
+      <li><span>Default mode</span>Take it apart. Learn it. Rebuild it better.</li>
+    </ul>
+  ),
+  timeline: (
+    <ol className="mini-timeline">
+      <li><span>2021</span><p>Started Computer Science at GITAM.</p></li>
+      <li><span>2024</span><p>Tested software and data at Exponential AI.</p></li>
+      <li><span>2025</span><p>Built AI products and agentic systems at nimoy.ai.</p></li>
+      <li><span>2026</span><p>Moved into software engineering at vriksha.ai.</p></li>
+    </ol>
+  ),
+};
+
+const chapters = [
+  {
+    number: "01",
+    word: "CODE",
+    line: "Computer science taught me how to turn an idea into something executable.",
+  },
+  {
+    number: "02",
+    word: "MODELS",
+    line: "AI taught me that an impressive answer means little without a reliable system.",
+  },
+  {
+    number: "03",
+    word: "SYSTEMS",
+    line: "APIs, queues, databases and deployment made the invisible work feel real.",
+  },
+  {
+    number: "04",
+    word: "NOW",
+    line: "I bring those layers together as a software engineer—and keep asking what is underneath.",
+  },
+];
+
+const gameCards = [
+  { id: "build", rank: "B", suit: "⌁", title: "BUILD", detail: "APIs · backends · databases" },
+  { id: "think", rank: "T", suit: "✦", title: "THINK", detail: "Algorithms · ML · RAG" },
+  { id: "see", rank: "S", suit: "◉", title: "SEE", detail: "Computer vision · interfaces" },
+  { id: "ship", rank: "S", suit: "↗", title: "SHIP", detail: "Queues · Docker · reliability" },
+];
 
 const projects = [
   {
+    id: "companion",
     number: "01",
     title: "Emotional Companion",
-    subtitle: "An AI that knows when to help—and when to listen.",
+    category: "Conversational AI",
+    year: "2025",
     description:
-      "A two-personality companion built around emotional context. Tom helps untangle the problem; Jerry makes space for the feeling. The product explores memory, tone, and the small decisions that make an AI feel less mechanical.",
-    tags: ["LangChain", "Gemini 2.5", "React", "Python"],
+      "Two AI personalities: one helps solve the problem, the other makes space for the feeling.",
+    tags: ["LangChain", "Gemini", "React", "Python"],
     link: "https://myfeelingsbuddy.netlify.app/",
-    cta: "Meet the companion",
-    visual: "companion"
+    cta: "Visit live project",
   },
   {
+    id: "forecast",
     number: "02",
     title: "Electricity Forecast",
-    subtitle: "Turning noisy demand signals into a clearer next move.",
+    category: "Machine Learning",
+    year: "2025",
     description:
-      "An end-to-end forecasting study on Victoria's energy data: deep EDA, careful feature preparation, four model families, and K-fold evaluation—wrapped in an API and interface instead of left inside a notebook.",
-    tags: ["Machine Learning", "Flask API", "React", "CatBoost"],
+      "Four model families compared on Victoria energy data, then shipped behind a simple API.",
+    tags: ["CatBoost", "Flask", "React", "ML"],
     link: "https://github.com/ParthivVarati/Electricity-Forecast",
-    cta: "View the repository",
-    visual: "forecast"
+    cta: "View repository",
   },
   {
+    id: "snaptrip",
     number: "03",
     title: "SnapTrip",
-    subtitle: "Search a place with a memory, not a keyword.",
-    description:
-      "A visual travel discovery tool using OpenCV, NumPy, and Chi-Squared image matching. Secure uploads and instant validation turn computer-vision work into an experience people can actually use.",
+    category: "Computer Vision",
+    year: "2024",
+    description: "A visual travel search experience powered by OpenCV image matching.",
     tags: ["OpenCV", "Flask", "NumPy", "JavaScript"],
     link: "https://github.com/ParthivVarati/SNAPTRIP",
-    cta: "Explore the build",
-    visual: "snap"
+    cta: "View repository",
   },
   {
+    id: "freelancer",
     number: "04",
     title: "Freelancer",
-    subtitle: "A practical marketplace for work and opportunity.",
-    description:
-      "A responsive platform where clients post work and professionals find, apply for, and manage opportunities. Designed as a complete system across authentication, data, APIs, and interface states.",
-    tags: ["React", "Flask API", "SQL", "Python"],
+    category: "Full-stack Product",
+    year: "2024",
+    description: "A full-stack marketplace for posting, finding and managing work.",
+    tags: ["React", "Flask", "SQL", "Python"],
     link: "https://github.com/ParthivVarati/FREELANCER",
-    cta: "View the platform",
-    visual: "network"
-  }
+    cta: "View repository",
+  },
 ];
 
-const story = [
+const roles = [
   {
-    number: "01",
-    label: "THE SCREEN",
-    title: "First, I wanted to know what was behind it.",
-    copy:
-      "Computer science gave me the usual building blocks—programming, databases, algorithms, machine learning, and software development. I thought I was collecting technologies. Really, I was collecting better questions."
+    period: "2026 — NOW",
+    role: "SDE-1",
+    company: "vriksha.ai",
+    note: "Building across product and systems in Bengaluru.",
+    current: true,
   },
   {
-    number: "02",
-    label: "THE MODEL",
-    title: "Building it made the black box more interesting.",
-    copy:
-      "Machine-learning projects pulled me underneath the output. Computer vision made me wonder how machines form a view of the world. Every answer exposed another layer worth understanding."
-  },
-  {
-    number: "03",
-    label: "THE SYSTEM",
-    title: "A clever model is only the beginning.",
-    copy:
-      "Backend work changed the question from ‘does it work?’ to ‘will it keep working?’ APIs, databases, queues, containers, latency, cost, and reliability became part of the same design problem."
-  },
-  {
-    number: "04",
-    label: "THE QUESTION",
-    title: "Then AI started to remember, retrieve, and act.",
-    copy:
-      "RAG, vector databases, memory, agents, and voice AI made the questions far more alive: Can an AI know what it needs? Use the right tool? Speak naturally? And can all of that survive the real world?"
-  }
-];
-
-const experience = [
-  {
-    period: "SEP 2025 — NOW",
+    period: "2025 — 2026",
     role: "AI Engineer",
-    company: "Nimoy AI",
-    location: "Remote",
-    summary:
-      "Building agentic and vision systems, from long-term memory and multi-API orchestration to the infrastructure that keeps them moving.",
-    impact: ["30% better multi-turn context", "1K+ emails processed / day", "YOLO + SAM vision workflows"]
+    company: "nimoy.ai",
+    note: "Agents, memory, asynchronous pipelines and computer vision.",
   },
   {
-    period: "JUN — JUL 2024",
-    role: "AI / Data Intern",
+    period: "2024",
+    role: "Intern",
     company: "Exponential AI",
-    location: "Hyderabad",
-    summary:
-      "Worked close to the data: testing software, annotating datasets, validating output, and tracing bugs through an Agile product cycle.",
-    impact: ["Data quality", "Output validation", "Product testing"]
-  }
+    note: "Software testing, data annotation and output validation.",
+  },
 ];
-
-const stack = [
-  ["THINK", "Python · SQL · Machine Learning · PyTorch"],
-  ["RETRIEVE", "RAG · LangChain · LangGraph · Vector search"],
-  ["PERCEIVE", "OpenCV · YOLOv8/11n · SAM 2"],
-  ["ORCHESTRATE", "Agents · Letta memory · RabbitMQ · Celery"],
-  ["SHIP", "Flask · REST APIs · React · Docker · Git"],
-  ["STORE", "MongoDB · MySQL · Structured data"]
-];
-
-const ease = [0.22, 1, 0.36, 1];
-
-function scrollToSection(id) {
-  const element = document.getElementById(id);
-  if (!element) return;
-  if (window.__portfolioLenis) window.__portfolioLenis.scrollTo(element, { offset: -18 });
-  else element.scrollIntoView({ behavior: "smooth" });
-}
 
 function Reveal({ children, className = "", delay = 0 }) {
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.18 }}
-      transition={{ duration: 0.75, delay, ease }}
+      viewport={{ once: true, margin: "-8%" }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
   );
 }
 
-function Navigation({ dark, onTheme }) {
+function Navigation() {
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState("");
 
   useEffect(() => {
-    const update = () => setTime(new Intl.DateTimeFormat("en-IN", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-      timeZone: "Asia/Kolkata"
-    }).format(new Date()));
+    const update = () => {
+      setTime(
+        new Intl.DateTimeFormat("en-IN", {
+          timeZone: "Asia/Kolkata",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }).format(new Date()),
+      );
+    };
     update();
-    const interval = setInterval(update, 30000);
-    return () => clearInterval(interval);
+    const interval = window.setInterval(update, 30000);
+    return () => window.clearInterval(interval);
   }, []);
 
-  const go = (id) => {
-    scrollToSection(id);
-    setOpen(false);
-  };
+  const close = () => setOpen(false);
 
   return (
-    <header className="site-nav-wrap">
-      <nav className="site-nav" aria-label="Main navigation">
-        <button className="wordmark" onClick={() => go("home")} aria-label="Go to home">
-          <span className="wordmark-dot" />
-          <span>NP.V</span>
+    <>
+      <motion.header
+        className="site-nav"
+        initial={{ opacity: 0, y: -18, x: "-50%" }}
+        animate={{ opacity: 1, y: 0, x: "-50%" }}
+        transition={{ duration: 0.7, delay: 0.15 }}
+      >
+        <a className="nav-mark" href="#top" aria-label="Back to top">NP<span>°</span></a>
+        <div className="nav-status"><i />SDE-1 · BLR {time && `· ${time}`}</div>
+        <nav aria-label="Main navigation">
+          <a href="#about">About</a>
+          <a href="#work">Work</a>
+          <a href="#play">Play</a>
+        </nav>
+        <a className="nav-contact" href={links.email}>Say hello <ArrowUpRight size={15} /></a>
+        <button
+          className="nav-toggle"
+          type="button"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? <X size={20} /> : <Menu size={20} />}
         </button>
-
-        <div className={`nav-links ${open ? "is-open" : ""}`}>
-          <button onClick={() => go("story")}>Story</button>
-          <button onClick={() => go("work")}>Work</button>
-          <button onClick={() => go("experience")}>Experience</button>
-          <button onClick={() => go("contact")}>Contact</button>
-        </div>
-
-        <div className="nav-utility">
-          <span className="nav-time"><i /> IND {time}</span>
-          <button className="theme-toggle" onClick={onTheme} aria-label="Toggle color theme">
-            {dark ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
-          <button className="menu-button" onClick={() => setOpen(!open)} aria-label="Toggle menu">
-            {open ? <X size={18} /> : <Menu size={18} />}
-          </button>
-        </div>
-      </nav>
-    </header>
+      </motion.header>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="mobile-menu"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+          >
+            <a href="#about" onClick={close}>About</a>
+            <a href="#work" onClick={close}>Work</a>
+            <a href="#play" onClick={close}>Play</a>
+            <a href={links.email} onClick={close}>Say hello <ArrowUpRight size={16} /></a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
-function CuriosityEngine() {
-  const card = useRef(null);
+function JackCard() {
+  const [flipped, setFlipped] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
-  const move = (event) => {
-    const rect = card.current?.getBoundingClientRect();
-    if (!rect) return;
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    card.current.style.setProperty("--engine-x", `${x * 13}deg`);
-    card.current.style.setProperty("--engine-y", `${y * -13}deg`);
-    card.current.style.setProperty("--pointer-x", `${(x + 0.5) * 100}%`);
-    card.current.style.setProperty("--pointer-y", `${(y + 0.5) * 100}%`);
-  };
-
-  const reset = () => {
-    card.current?.style.setProperty("--engine-x", "0deg");
-    card.current?.style.setProperty("--engine-y", "0deg");
+  const handlePointer = (event) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    setTilt({ x: y * -8, y: x * 10 });
   };
 
   return (
-    <motion.div
-      ref={card}
-      className="engine-card"
-      onPointerMove={move}
-      onPointerLeave={reset}
-      initial={{ opacity: 0, scale: 0.94, rotate: 2 }}
-      animate={{ opacity: 1, scale: 1, rotate: -1 }}
-      transition={{ duration: 1, delay: 0.5, ease }}
-    >
-      <div className="engine-topline">
-        <span>LIVE / CURIOSITY MAP</span>
-        <span className="engine-signal"><i /> LISTENING</span>
-      </div>
-      <div className="engine-scene">
-        <span className="float-chip chip-memory">MEMORY</span>
-        <span className="float-chip chip-vision">VISION</span>
-        <span className="float-chip chip-rag">RAG</span>
-        <span className="float-chip chip-voice">VOICE</span>
-        <div className="orbit orbit-one"><i /></div>
-        <div className="orbit orbit-two"><i /></div>
-        <div className="orbit orbit-three" />
-        <div className="engine-core">
-          <span>WHY?</span>
-          <small>THE FIRST INPUT</small>
-        </div>
-      </div>
-      <div className="engine-bottomline">
-        <span>QUESTION → MODEL → SYSTEM</span>
-        <span>17° 23′ N / 78° 29′ E</span>
-      </div>
-    </motion.div>
+    <div className="hero-card-wrap">
+      <motion.button
+        className={`jack-card ${flipped ? "is-flipped" : ""}`}
+        type="button"
+        aria-label="Flip the Jack of all trades card"
+        onClick={() => setFlipped((value) => !value)}
+        onPointerMove={handlePointer}
+        onPointerLeave={() => setTilt({ x: 0, y: 0 })}
+        animate={{ rotateX: tilt.x, rotateY: tilt.y }}
+        transition={{ type: "spring", stiffness: 180, damping: 18 }}
+      >
+        <span className="jack-inner">
+          <span className="jack-face jack-front">
+            <span className="card-corner top"><b>J</b><i>✦</i></span>
+            <span className="jack-orbit orbit-one"><i>CODE</i></span>
+            <span className="jack-orbit orbit-two"><i>AI</i></span>
+            <span className="jack-orbit orbit-three"><i>SHIP</i></span>
+            <span className="jack-centre"><small>THE</small><strong>JACK</strong><em>of all trades</em></span>
+            <span className="card-corner bottom"><b>J</b><i>✦</i></span>
+          </span>
+          <span className="jack-face jack-back">
+            <span className="back-grid" />
+            <span className="back-copy">
+              <small>MY HAND</small>
+              <strong>CODE<br />MODELS<br />SYSTEMS<br />PRODUCT</strong>
+              <em>Different cards.<br />One curious mind.</em>
+            </span>
+          </span>
+        </span>
+      </motion.button>
+      <span className="card-hint"><i /> click the card</span>
+    </div>
   );
 }
 
 function Hero() {
-  const words = ["Somewhere", "between code", "& curiosity."];
   return (
-    <section id="home" className="hero section-shell">
-      <div className="hero-grid">
-        <div className="hero-copy">
-          <motion.p
-            className="eyebrow"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-          >
-            NAGA PARTHIV · AI ENGINEER
-          </motion.p>
-          <h1 className="hero-title">
-            {words.map((word, index) => (
-              <motion.span
-                key={word}
-                className={index === 2 ? "hero-serif" : ""}
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.95, delay: 0.15 + index * 0.11, ease }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </h1>
-          <motion.p
-            className="hero-intro"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.65, ease }}
-          >
-            I build AI systems that can retrieve, reason, remember, and act—then do the
-            engineering work that makes them dependable in the real world.
-          </motion.p>
-          <motion.div
-            className="hero-actions"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.78, ease }}
-          >
-            <button className="button button-primary" onClick={() => scrollToSection("work")}>
-              Explore the work <ArrowDown size={17} />
-            </button>
-            <a className="text-link" href={RESUME} target="_blank" rel="noreferrer">
-              Résumé <ArrowUpRight size={15} />
-            </a>
-          </motion.div>
-        </div>
-        <div className="hero-visual"><CuriosityEngine /></div>
+    <main id="top" className="hero section-shell">
+      <div className="hero-copy">
+        <motion.p
+          className="eyebrow"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25, duration: 0.6 }}
+        >
+          NAGA PARTHIV · SOFTWARE ENGINEER
+        </motion.p>
+        <motion.h1
+          initial={{ opacity: 0, y: 32 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+        >
+          A jack of <em>all</em><br />trades.
+        </motion.h1>
+        <motion.p
+          className="hero-subtitle"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.7 }}
+        >
+          Engineer by practice. Curious by default.<br />I connect the layers others keep separate.
+        </motion.p>
+        <motion.div
+          className="hero-actions"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.75, duration: 0.7 }}
+        >
+          <a className="button button-dark" href="#work">See selected work <ArrowDown size={16} /></a>
+          <a className="text-link" href={links.resume} target="_blank" rel="noreferrer">Résumé <ArrowUpRight size={15} /></a>
+        </motion.div>
       </div>
-
-      <div className="hero-footer">
-        <span><i className="status-dot" /> OPEN TO INTERESTING PROBLEMS</span>
-        <span className="hero-scroll">SCROLL TO FOLLOW THE QUESTIONS <ArrowDown size={13} /></span>
-      </div>
-    </section>
+      <motion.div
+        className="hero-visual"
+        initial={{ opacity: 0, scale: 0.88, rotate: 6 }}
+        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+        transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <JackCard />
+      </motion.div>
+      <div className="hero-scroll">SCROLL TO DEAL <ArrowDown size={14} /></div>
+    </main>
   );
 }
 
-function QuestionMarquee() {
-  const items = ["RETRIEVE", "REMEMBER", "REASON", "SEE", "ACT", "SPEAK"];
-  return (
-    <div className="question-marquee" aria-label="AI capabilities">
-      <div className="marquee-track">
-        {[...items, ...items].map((item, index) => (
-          <span key={`${item}-${index}`}><i>CAN IT</i> {item}<b>?</b></span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Story() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.7", "end 0.8"] });
-  const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 25 });
+function About() {
+  const [mode, setMode] = useState("story");
 
   return (
-    <section id="story" ref={ref} className="story section-shell">
-      <div className="section-kicker">
-        <span>01 / ORIGIN STORY</span>
-        <span>THE LONG ANSWER</span>
-      </div>
-      <div className="story-layout">
-        <div className="story-intro">
-          <Reveal>
-            <h2>I thought I was learning <em>technology.</em></h2>
-            <p>Turns out, I was learning how to keep asking better questions.</p>
-          </Reveal>
-          <div className="story-sticky-note">
-            <span>MY CURRENT THEORY</span>
-            <strong>Intelligence becomes useful only when engineering gives it somewhere real to live.</strong>
-          </div>
-        </div>
-        <div className="story-rail">
-          <div className="story-line"><motion.div style={{ scaleY: progress }} /></div>
-          {story.map((chapter) => (
-            <Reveal className="story-chapter" key={chapter.number}>
-              <div className="story-number">{chapter.number}</div>
-              <div>
-                <span className="chapter-label">{chapter.label}</span>
-                <h3>{chapter.title}</h3>
-                <p>{chapter.copy}</p>
-              </div>
-            </Reveal>
-          ))}
-          <Reveal className="question-cluster">
-            <span>CAN AN AI REMEMBER?</span>
-            <span>CAN IT CHOOSE A TOOL?</span>
-            <span>CAN IT SPEAK NATURALLY?</span>
-            <span>CAN WE TRUST IT AT SCALE?</span>
-          </Reveal>
-        </div>
-      </div>
-      <Reveal className="story-ending">
-        <p>Today, I work where AI meets software engineering.</p>
-        <h2>For now, I’m following the questions.</h2>
-        <span>AND SEEING WHERE THEY TAKE ME NEXT ↘</span>
+    <section id="about" className="about section-shell">
+      <Reveal className="section-intro">
+        <p className="section-kicker"><span>01</span> The person behind the card</p>
+        <h2>Somewhere between<br /><em>code & curiosity.</em></h2>
       </Reveal>
+      <div className="about-layout">
+        <Reveal className="about-tabs" delay={0.1}>
+          {Object.keys(aboutCopy).map((key) => (
+            <button
+              type="button"
+              key={key}
+              className={mode === key ? "active" : ""}
+              onClick={() => setMode(key)}
+            >
+              {key === "tldr" ? "TL;DR" : key[0].toUpperCase() + key.slice(1)}
+            </button>
+          ))}
+        </Reveal>
+        <div className="about-panel" aria-live="polite">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={mode}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.35 }}
+            >
+              {aboutCopy[mode]}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
     </section>
   );
 }
 
-function ProjectVisual({ type }) {
-  if (type === "companion") {
-    return (
-      <div className="project-visual visual-companion">
-        <div className="soft-orb orb-a" /><div className="soft-orb orb-b" />
-        <div className="chat chat-a"><b>Tom</b><span>Let’s work through it.</span></div>
-        <div className="chat chat-b"><b>Jerry</b><span>I’m here. Take your time.</span></div>
-        <div className="visual-caption">MODE / EMPATHY + ACTION</div>
-      </div>
-    );
-  }
-  if (type === "forecast") {
-    return (
-      <div className="project-visual visual-forecast">
-        <div className="forecast-top"><span>VICTORIA / DEMAND</span><strong>+12.8%</strong></div>
-        <svg viewBox="0 0 700 300" preserveAspectRatio="none" aria-hidden="true">
-          <defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#caff45" stopOpacity=".45"/><stop offset="1" stopColor="#caff45" stopOpacity="0"/></linearGradient></defs>
-          <path className="forecast-area" d="M0,255 C45,210 70,240 105,190 C155,120 185,210 235,162 C280,115 330,150 370,95 C412,42 450,162 500,112 C555,56 610,102 700,36 L700,300 L0,300 Z" />
-          <path className="forecast-line" pathLength="1" d="M0,255 C45,210 70,240 105,190 C155,120 185,210 235,162 C280,115 330,150 370,95 C412,42 450,162 500,112 C555,56 610,102 700,36" />
-        </svg>
-        <div className="forecast-axis"><span>00:00</span><span>08:00</span><span>16:00</span><span>24:00</span></div>
-      </div>
-    );
-  }
-  if (type === "snap") {
-    return (
-      <div className="project-visual visual-snap">
-        <div className="snap-frame snap-main">
-          <div className="sun" /><div className="mountain mountain-one"/><div className="mountain mountain-two"/>
-          <div className="scan-reticle"><i/><i/><i/><i/></div>
-        </div>
-        <div className="snap-result"><span>VISUAL MATCH</span><strong>94.2%</strong><small>LOCATION FOUND</small></div>
-        <div className="visual-caption">SEARCH / WITHOUT WORDS</div>
-      </div>
-    );
-  }
+function StoryRail() {
   return (
-    <div className="project-visual visual-network">
-      <div className="network-card card-client"><span>CLIENT</span><strong>Build an AI search tool</strong><small>POSTED 2M AGO</small></div>
-      <div className="network-card card-match"><span>BEST MATCH</span><strong>84%</strong><small>FULL-STACK / AI</small></div>
-      <svg viewBox="0 0 700 330" aria-hidden="true">
-        <path d="M190 210 C300 80 420 250 535 125"/><path d="M190 210 C350 330 480 230 535 125"/>
-        <circle cx="190" cy="210" r="8"/><circle cx="535" cy="125" r="8"/>
-      </svg>
-      <div className="visual-caption">OPPORTUNITY / CONNECTED</div>
-    </div>
+    <section className="story-rail">
+      <div className="section-shell story-heading">
+        <Reveal>
+          <p className="section-kicker section-kicker-light"><span>02</span> Four chapters. One thread.</p>
+        </Reveal>
+      </div>
+      {chapters.map((chapter) => (
+        <motion.article
+          className="chapter section-shell"
+          key={chapter.word}
+          initial={{ opacity: 0.28 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ amount: 0.65 }}
+          transition={{ duration: 0.45 }}
+        >
+          <span className="chapter-number">{chapter.number}</span>
+          <h3>{chapter.word}</h3>
+          <p>{chapter.line}</p>
+        </motion.article>
+      ))}
+    </section>
   );
 }
 
-function ProjectCard({ project }) {
-  const ref = useRef(null);
-  const tilt = (event) => {
-    const rect = ref.current?.getBoundingClientRect();
-    if (!rect) return;
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    ref.current.style.setProperty("--card-rx", `${y * -2.5}deg`);
-    ref.current.style.setProperty("--card-ry", `${x * 3.5}deg`);
-  };
-  const reset = () => {
-    ref.current?.style.setProperty("--card-rx", "0deg");
-    ref.current?.style.setProperty("--card-ry", "0deg");
+function CardGame() {
+  const [cards, setCards] = useState(gameCards);
+  const [flipped, setFlipped] = useState(new Set());
+
+  const flip = (id) => {
+    setFlipped((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   };
 
+  const shuffle = () => {
+    setFlipped(new Set());
+    setCards((current) => [...current].sort(() => Math.random() - 0.5));
+  };
+
+  const allFound = flipped.size === cards.length;
+
   return (
-    <motion.article
-      ref={ref}
-      className={`project-card project-${project.visual}`}
-      onPointerMove={tilt}
-      onPointerLeave={reset}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.8, ease }}
-    >
-      <div className="project-info">
-        <div className="project-meta"><span>{project.number}</span><span>SELECTED PROJECT</span></div>
-        <div>
-          <h3>{project.title}</h3>
-          <h4>{project.subtitle}</h4>
-          <p>{project.description}</p>
+    <section id="play" className="play-section">
+      <div className="section-shell">
+        <div className="play-heading">
+          <Reveal>
+            <p className="section-kicker section-kicker-light"><span>03</span> A small intermission</p>
+            <h2>Pick a card.<br /><em>Any card.</em></h2>
+          </Reveal>
+          <Reveal className="play-instructions" delay={0.1}>
+            <p>Every card is a different part of how I work. Turn over the whole hand.</p>
+            <button type="button" onClick={shuffle}><Shuffle size={16} /> Shuffle</button>
+          </Reveal>
         </div>
-        <div>
-          <div className="tag-row">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
-          <a className="project-link" href={project.link} target="_blank" rel="noreferrer">
-            {project.cta} <ArrowUpRight size={18} />
-          </a>
+        <LayoutGroup>
+          <div className="game-grid">
+            {cards.map((card, index) => (
+              <motion.button
+                layout
+                key={card.id}
+                type="button"
+                className={`game-card ${flipped.has(card.id) ? "is-flipped" : ""}`}
+                aria-label={`${flipped.has(card.id) ? "Hide" : "Reveal"} ${card.title} card`}
+                onClick={() => flip(card.id)}
+                transition={{ layout: { type: "spring", stiffness: 260, damping: 24 } }}
+                style={{ "--card-index": index }}
+              >
+                <span className="game-card-inner">
+                  <span className="game-face game-front">
+                    <span className="game-corner">{card.rank}<i>{card.suit}</i></span>
+                    <strong>{card.suit}</strong>
+                    <span className="game-corner game-corner-bottom">{card.rank}<i>{card.suit}</i></span>
+                  </span>
+                  <span className="game-face game-back">
+                    <small>{card.suit}</small>
+                    <strong>{card.title}</strong>
+                    <span>{card.detail}</span>
+                  </span>
+                </span>
+              </motion.button>
+            ))}
+          </div>
+        </LayoutGroup>
+        <div className={`game-result ${allFound ? "visible" : ""}`} aria-live="polite">
+          <Check size={18} /> That’s the trick: the cards work because they work together.
         </div>
       </div>
-      <ProjectVisual type={project.visual} />
-    </motion.article>
+    </section>
   );
+}
+
+function ProjectArtwork({ id }) {
+  if (id === "companion") {
+    return <div className="project-art companion-art"><i /><i /><span>How are you,<br />really?</span></div>;
+  }
+  if (id === "forecast") {
+    return (
+      <div className="project-art forecast-art">
+        <span>24h</span>
+        <svg viewBox="0 0 320 150" role="img" aria-label="Forecast line graphic">
+          <path d="M10 125 C45 105, 50 70, 86 85 S140 125, 168 68 S218 40, 242 58 S280 85, 310 20" />
+          <path className="ghost-line" d="M10 135 C45 115, 62 90, 92 103 S144 138, 178 90 S230 65, 250 76 S285 99, 310 48" />
+        </svg>
+      </div>
+    );
+  }
+  if (id === "snaptrip") {
+    return <div className="project-art snap-art"><span className="reticle"><i /></span><b>FIND<br />THE<br />PLACE</b></div>;
+  }
+  return <div className="project-art freelancer-art"><span>POST</span><i>↔</i><span>BUILD</span></div>;
 }
 
 function Work() {
+  const [active, setActive] = useState("companion");
+
   return (
     <section id="work" className="work section-shell">
-      <div className="section-kicker"><span>02 / SELECTED WORK</span><span>BUILT TO LEAVE THE NOTEBOOK</span></div>
       <Reveal className="work-heading">
-        <h2>Ideas are easy.<br/><em>Making them hold up</em> is the work.</h2>
-        <p>Four projects across agents, machine learning, computer vision, and product engineering.</p>
+        <p className="section-kicker"><span>04</span> Selected work</p>
+        <h2>Things I’ve<br /><em>brought to life.</em></h2>
       </Reveal>
-      <div className="project-list">{projects.map((project) => <ProjectCard key={project.title} project={project} />)}</div>
-      <a className="all-work-link" href="https://github.com/ParthivVarati" target="_blank" rel="noreferrer">
-        <Github size={19} /> MORE EXPERIMENTS ON GITHUB <ArrowUpRight size={17} />
-      </a>
+      <div className="project-list">
+        {projects.map((project) => {
+          const isActive = active === project.id;
+          return (
+            <article className={`project-row ${isActive ? "active" : ""}`} key={project.id}>
+              <button
+                type="button"
+                className="project-trigger"
+                aria-expanded={isActive}
+                onClick={() => setActive(isActive ? null : project.id)}
+              >
+                <span className="project-number">{project.number}</span>
+                <strong>{project.title}</strong>
+                <span>{project.category}</span>
+                <span>{project.year}</span>
+                <i>{isActive ? "−" : "+"}</i>
+              </button>
+              <AnimatePresence initial={false}>
+                {isActive && (
+                  <motion.div
+                    className="project-detail"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <div className="project-detail-inner">
+                      <div className="project-description">
+                        <p>{project.description}</p>
+                        <div className="project-tags">
+                          {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                        </div>
+                        <a href={project.link} target="_blank" rel="noreferrer">
+                          {project.cta} <ArrowUpRight size={16} />
+                        </a>
+                      </div>
+                      <ProjectArtwork id={project.id} />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </article>
+          );
+        })}
+      </div>
     </section>
   );
 }
 
 function Experience() {
   return (
-    <section id="experience" className="experience">
-      <div className="section-shell">
-        <div className="section-kicker section-kicker-invert"><span>03 / EXPERIENCE</span><span>WHERE THE QUESTIONS GOT PRACTICAL</span></div>
-        <Reveal className="experience-heading">
-          <p>CURRENTLY</p>
-          <h2>Turning intelligence into<br/><em>infrastructure.</em></h2>
-        </Reveal>
-        <div className="experience-list">
-          {experience.map((item, index) => (
-            <Reveal className="experience-row" key={item.company} delay={index * 0.08}>
-              <div className="experience-index">0{index + 1}</div>
-              <div className="experience-title">
-                <span>{item.period}</span>
-                <h3>{item.role}</h3>
-                <p>{item.company} · {item.location}</p>
-              </div>
-              <div className="experience-detail">
-                <p>{item.summary}</p>
-                <div>{item.impact.map((point) => <span key={point}>{point}</span>)}</div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+    <section className="experience section-shell">
+      <Reveal className="experience-title">
+        <p className="section-kicker"><span>05</span> The route so far</p>
+        <h2>Still becoming.</h2>
+      </Reveal>
+      <div className="role-list">
+        {roles.map((item, index) => (
+          <Reveal className="role-row" key={`${item.company}-${item.role}`} delay={index * 0.06}>
+            <span className="role-period">{item.period}</span>
+            <div className="role-name">
+              <h3>{item.role}</h3>
+              <p>{item.company}</p>
+            </div>
+            <p className="role-note">{item.note}</p>
+            {item.current && <span className="current-pill"><i /> Current</span>}
+          </Reveal>
+        ))}
+      </div>
+      <div className="education-note">
+        <span>EDUCATION</span>
+        <p>B.Tech Computer Science · GITAM University · 2021—2025 · 8.57 CGPA</p>
       </div>
     </section>
   );
 }
 
-function Stack() {
+function SkillTicker() {
+  const skills = ["PYTHON", "REACT", "FLASK", "SQL", "DOCKER", "RAG", "COMPUTER VISION", "LLMs"];
+  const repeated = useMemo(() => [...skills, ...skills], []);
   return (
-    <section id="stack" className="stack section-shell">
-      <div className="section-kicker"><span>04 / UNDER THE HOOD</span><span>THE LESS GLAMOROUS, VERY NECESSARY BITS</span></div>
-      <div className="stack-layout">
-        <Reveal className="stack-heading">
-          <h2>The model is<br/>maybe <em>20%.</em></h2>
-          <p>The rest is retrieval, orchestration, interfaces, monitoring, edge cases, and making sure it works again tomorrow.</p>
-        </Reveal>
-        <div className="stack-list">
-          {stack.map(([label, tools], index) => (
-            <Reveal className="stack-row" key={label} delay={(index % 3) * 0.04}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <strong>{label}</strong>
-              <p>{tools}</p>
-              <i>↗</i>
-            </Reveal>
-          ))}
-        </div>
+    <div className="skill-ticker" aria-label={`Tools I use: ${skills.join(", ")}`}>
+      <div>
+        {repeated.map((skill, index) => <span key={`${skill}-${index}`}>{skill}<i>✦</i></span>)}
       </div>
-      <Reveal className="education-note">
-        <div><span>FOUNDATION</span><strong>B.Tech, Computer Science</strong><small>GITAM University · 2021—2025</small></div>
-        <b>8.57</b>
-        <p>CGPA / 10</p>
-      </Reveal>
-    </section>
+    </div>
   );
 }
 
 function Contact() {
-  const [copied, setCopied] = useState(false);
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(EMAIL);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      window.location.href = `mailto:${EMAIL}`;
-    }
-  };
-
   return (
-    <section id="contact" className="contact">
-      <div className="contact-noise" />
+    <footer id="contact" className="contact">
+      <SkillTicker />
       <div className="section-shell contact-inner">
         <Reveal>
-          <span className="contact-kicker">NEXT QUESTION / YOURS</span>
-          <h2>What should we<br/><em>build next?</em></h2>
-          <p>AI products, agentic systems, vision experiments, or a hard engineering problem that refuses to be boring.</p>
+          <p className="section-kicker section-kicker-light"><span>06</span> Your move</p>
+          <h2>Got a card<br />worth <em>playing?</em></h2>
         </Reveal>
-        <div className="contact-actions">
-          <button className="email-button" onClick={copy}>
-            <span>{copied ? "COPIED" : EMAIL}</span>
-            {copied ? <Check size={24} /> : <Mail size={24} />}
-          </button>
+        <Reveal className="contact-side" delay={0.1}>
+          <p>I’m always up for a good problem, a thoughtful product, or an interesting hello.</p>
+          <a className="contact-email" href={links.email}>parthivvarati@gmail.com <ArrowUpRight /></a>
           <div className="social-links">
-            <a href="https://github.com/ParthivVarati" target="_blank" rel="noreferrer"><Github size={17}/> GitHub <ArrowUpRight size={14}/></a>
-            <a href="https://www.linkedin.com/in/naga-parthiv/" target="_blank" rel="noreferrer"><Linkedin size={17}/> LinkedIn <ArrowUpRight size={14}/></a>
-            <a href={RESUME} target="_blank" rel="noreferrer">Résumé <ArrowUpRight size={14}/></a>
+            <a href={links.github} target="_blank" rel="noreferrer"><Github size={17} /> GitHub</a>
+            <a href={links.linkedin} target="_blank" rel="noreferrer"><Linkedin size={17} /> LinkedIn</a>
+            <a href={links.email}><Mail size={17} /> Email</a>
           </div>
-        </div>
-        <footer>
-          <span>NAGA PARTHIV VARMA VARATI © {new Date().getFullYear()}</span>
-          <button onClick={() => scrollToSection("home")}>BACK TO THE FIRST QUESTION ↑</button>
-        </footer>
+        </Reveal>
       </div>
-    </section>
+      <div className="section-shell footer-line">
+        <span>© {new Date().getFullYear()} Naga Parthiv</span>
+        <a href="#top">Back to top ↑</a>
+        <span>Built with curiosity in Bengaluru</span>
+      </div>
+    </footer>
   );
 }
 
-export default function App() {
-  const [dark, setDark] = useState(false);
+function App() {
   const { scrollYProgress } = useScroll();
-  const pageProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
+  const scaleX = useSpring(scrollYProgress, { stiffness: 160, damping: 28, restDelta: 0.001 });
 
   useEffect(() => {
-    const saved = localStorage.getItem("parthiv-theme");
-    if (saved === "dark") setDark(true);
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = dark ? "dark" : "light";
-    localStorage.setItem("parthiv-theme", dark ? "dark" : "light");
-  }, [dark]);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const lenis = new Lenis({ duration: 1.05, smoothWheel: true });
     let frame;
-    const loop = (time) => { lenis.raf(time); frame = requestAnimationFrame(loop); };
-    frame = requestAnimationFrame(loop);
-    window.__portfolioLenis = lenis;
+    const raf = (time) => {
+      lenis.raf(time);
+      frame = requestAnimationFrame(raf);
+    };
+    frame = requestAnimationFrame(raf);
     return () => {
       cancelAnimationFrame(frame);
       lenis.destroy();
-      window.__portfolioLenis = null;
     };
-  }, []);
-
-  useEffect(() => {
-    const move = (event) => {
-      document.documentElement.style.setProperty("--mouse-x", `${event.clientX}px`);
-      document.documentElement.style.setProperty("--mouse-y", `${event.clientY}px`);
-    };
-    window.addEventListener("pointermove", move, { passive: true });
-    return () => window.removeEventListener("pointermove", move);
   }, []);
 
   return (
-    <div className="site">
-      <motion.div className="page-progress" style={{ scaleX: pageProgress }} />
-      <div className="cursor-light" />
-      <Navigation dark={dark} onTheme={() => setDark(!dark)} />
-      <main>
-        <Hero />
-        <QuestionMarquee />
-        <Story />
-        <Work />
-        <Experience />
-        <Stack />
-        <Contact />
-      </main>
-    </div>
+    <>
+      <motion.div className="scroll-progress" style={{ scaleX }} />
+      <Navigation />
+      <Hero />
+      <About />
+      <StoryRail />
+      <CardGame />
+      <Work />
+      <Experience />
+      <Contact />
+    </>
   );
 }
+
+export default App;
